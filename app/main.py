@@ -3,10 +3,13 @@ import sys
 # import pyparsing - available if you need it!
 # import lark - available if you need it!
 
+w_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 
 def match_pattern(input_line, pattern):
     if pattern == r"\d":
         return any(ch.isdigit() for ch in input_line)
+    if pattern == r"\w":
+        return any(ch in w_characters for ch in input_line)
     if len(pattern) == 1:
         return pattern in input_line
     else:
