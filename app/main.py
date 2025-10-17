@@ -7,12 +7,15 @@ w_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 
 def match_pattern(input_line, pattern):
     if pattern == r"\d":
-        return any(ch.isdigit() for ch in input_line)
+        return any(char.isdigit() for char in input_line)
     elif pattern == r"\w":
-        return any(ch in w_characters for ch in input_line)
+        return any(char in w_characters for char in input_line)
+    elif pattern.startswith('[^') and pattern.endswith(']'):
+        not_allowed_chars = pattern[2:-1]
+        return any(char not in not_allowed_chars for char in input_line) 
     elif pattern.startswith('[') and pattern.endswith(']'):
         allowed_chars = pattern[1:-1]
-        return any(c in allowed_chars for c in input_line)
+        return any(char in allowed_chars for char in input_line)
     if len(pattern) == 1:
         return pattern in input_line
     else:
