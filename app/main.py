@@ -5,6 +5,8 @@ import sys
 
 
 def match_pattern(input_line, pattern):
+    if pattern == r"\d":
+        return any(ch.isdigit() for ch in input_line)
     if len(pattern) == 1:
         return pattern in input_line
     else:
