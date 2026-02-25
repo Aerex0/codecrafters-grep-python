@@ -5,6 +5,10 @@ def parse_pattern(pattern):
     i = 0
     # Handle the start anchor separately if it exists
     is_anchored = False
+    is_lineanchored = False
+    if pattern.endswith('$'):
+        is_lineanchored = True
+        pattern = pattern[:-1] # Remove the trailing $
     if pattern.startswith('^'):
         is_anchored = True
         i = 1
@@ -24,7 +28,7 @@ def parse_pattern(pattern):
         else:
             tokens.append(pattern[i])
             i += 1
-    return tokens, is_anchored
+    return tokens, is_anchored, is_lineanchored
 
 def match_token(ch, token):
     if token == r'\d':
@@ -51,6 +55,22 @@ def match_at_position(tokens, input_line, start_pos):
             return False
     return True
 
+def match_at_position(tokens, input_line, start_pos):
+    """Checks if the sequence of tokens matches starting at a specific index."""
+    if len(tokens) == 0:
+        return True
+    
+    for j, token in enumerate(tokens):
+        input_idx = start_pos + j
+        if input_idx >= len(input_line):
+            return False
+        if not match_token(input_line[input_idx], token):
+            return False
+        l = -(j+1)
+        if not match_token(input_line[-l],token[-l]):
+            return False
+    return True
+
 def main():
     if len(sys.argv) < 3:
         exit(1)
@@ -58,9 +78,9 @@ def main():
     pattern = sys.argv[2]
     input_line = sys.stdin.read().strip('\n') # Strip trailing newline from echo
 
-    tokens, is_anchored = parse_pattern(pattern)
+    tokens, is_anchored, is_lineanchored = parse_pattern(pattern)
 
-    if is_anchored:
+    if is_anchored or is_lineanchored:
         # Must match exactly from index 0
         if match_at_position(tokens, input_line, 0):
             sys.exit(0)
