@@ -67,7 +67,7 @@ def match_at_position(tokens, input_line, start_pos):
         if not match_token(input_line[input_idx], token):
             return False
         l = -(j+1)
-        if not match_token(input_line[-l],token[-l]):
+        if not match_token(input_line[l],token[l]):
             return False
     return True
 
