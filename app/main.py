@@ -42,18 +42,18 @@ def match_token(ch, token):
         return ch in content
     return ch == token
 
-def match_at_position(tokens, input_line, start_pos):
-    """Checks if the sequence of tokens matches starting at a specific index."""
-    if len(tokens) == 0:
-        return True
+# def match_at_position(tokens, input_line, start_pos):
+#     """Checks if the sequence of tokens matches starting at a specific index."""
+#     if len(tokens) == 0:
+#         return True
     
-    for j, token in enumerate(tokens):
-        input_idx = start_pos + j
-        if input_idx >= len(input_line):
-            return False
-        if not match_token(input_line[input_idx], token):
-            return False
-    return True
+#     for j, token in enumerate(tokens):
+#         input_idx = start_pos + j
+#         if input_idx >= len(input_line):
+#             return False
+#         if not match_token(input_line[input_idx], token):
+#             return False
+#     return True
 
 def match_at_position(tokens, input_line, start_pos):
     """Checks if the sequence of tokens matches starting at a specific index."""
