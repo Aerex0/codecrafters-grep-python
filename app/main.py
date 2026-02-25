@@ -42,19 +42,6 @@ def match_token(ch, token):
         return ch in content
     return ch == token
 
-# def match_at_position(tokens, input_line, start_pos):
-#     """Checks if the sequence of tokens matches starting at a specific index."""
-#     if len(tokens) == 0:
-#         return True
-    
-#     for j, token in enumerate(tokens):
-#         input_idx = start_pos + j
-#         if input_idx >= len(input_line):
-#             return False
-#         if not match_token(input_line[input_idx], token):
-#             return False
-#     return True
-
 def match_at_position(tokens, input_line, start_pos):
     """Checks if the sequence of tokens matches starting at a specific index."""
     if len(tokens) == 0:
@@ -65,9 +52,6 @@ def match_at_position(tokens, input_line, start_pos):
         if input_idx >= len(input_line):
             return False
         if not match_token(input_line[input_idx], token):
-            return False
-        l = -(j+1)
-        if not match_token(input_line[l],tokens[l]):
             return False
     return True
 
@@ -80,9 +64,21 @@ def main():
 
     tokens, is_anchored, is_lineanchored = parse_pattern(pattern)
 
-    if is_anchored or is_lineanchored:
+    if is_anchored and is_lineanchored:
+        # Must match exactly from index 0 and at the end of the line
+        if len(tokens) == len(input_line) and match_at_position(tokens, input_line, 0):
+            sys.exit(0)
+        else:
+            sys.exit(1)
+    elif is_anchored:
         # Must match exactly from index 0
         if match_at_position(tokens, input_line, 0):
+            sys.exit(0)
+        else:
+            sys.exit(1)
+    elif is_lineanchored:
+        # Must match exactly at the end of the line
+        if match_at_position(tokens, input_line, len(input_line) - len(tokens)):
             sys.exit(0)
         else:
             sys.exit(1)
